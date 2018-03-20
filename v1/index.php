@@ -132,31 +132,44 @@ $app->post('/login', function() use ($app) {
 
     $db = new DbHandler();
     // vérifier l'Email et le mot de passe sont corrects
-    if ($db->checkLogin($email, $password)) {
+    var result = $db->checkLogin($email, $password);
+    if (result == "ok") {
         // obtenir l'utilisateur par email
         $user = $db->getUserByEmail($email);
 
         if ($user != NULL) {
             if($user["status"]==1){
-            $response["error"] = false;
-            $response['name'] = $user['name'];
-            $response['email'] = $user['email'];
-            $response['apiKey'] = $user['api_key'];
-            $response['createdAt'] = $user['created_at'];
+                $response["error"] = false;
+                $response['name'] = $user['name'];
+                $response['email'] = $user['email'];
+                $response['apiKey'] = $user['api_key'];
+                $response['createdAt'] = $user['created_at'];
             }
-            else {
+            else if($user["status"]==0) {
                 $response['error'] = true;
+                $response['champ'] = "email";
+                $response['message'] = "Votre compte n'a pas encore été validé";
+            }else{
+                $response['error'] = true;
+                $response['champ'] = "email";
                 $response['message'] = "Votre compte a été suspendu";
             }
         } else {
             // erreur inconnue est survenue
             $response['error'] = true;
-            $response['message'] = "Une erreur est survenue. S'il vous plaît essayer à nouveau";
+            $response['champ'] = "email";
+            $response['message'] = "Erreur inconnue";
         }
-    } else {
+    } else if(result == "error") {
         // identificateurs de l'utilisateur sont erronés
         $response['error'] = true;
+        $response['champ'] = "password";
         $response['message'] = 'Échec de la connexion. identificateurs incorrectes';
+    } else {
+        // not-found : le compte n'existe pas
+        $response['error'] = true;
+        $response['champ'] = "email";
+        $response['message'] = 'Ce compte n\'existe pas';
     }
 
     echoRespnse(200, $response);
