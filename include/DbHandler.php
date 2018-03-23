@@ -89,16 +89,16 @@ class DbHandler {
 
             if (PassHash::check_password($password_hash, $password)) {
                 // Mot de passe utilisateur est correcte
-                return "ok";
+                return 'CONNECTION_OK';
             } else {
                 // mot de passe utilisateur est incorrect
-                return "error";
+                return 'CONNECTION_NOK';
             }
         } else {
             $stmt->close();
 
             // utilisateur n'existe pas avec l'e-mail
-            return "not-found";
+            return 'CONNECTION_ERROR';
         }
     }
 

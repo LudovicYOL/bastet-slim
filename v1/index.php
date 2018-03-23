@@ -67,6 +67,19 @@ function echoRespnse($status_code, $response) {
     echo utf8_encode(json_encode($response));
 }
 
+/**
+ * Crée une réponse
+ * @param Boolean $error indique s'il y'a une erreur
+ * @param String $field champ provoquant l'erreur
+ * @param String $message message d'erreur
+ */
+function createResponse($error, $field, $message){
+    $response["error"] = $error;
+    $response["field"] = $field;
+    $response["message"] = $message;
+    return $response;
+}
+
 
 
 $app->get('/test', function () { 
@@ -132,8 +145,8 @@ $app->post('/login', function() use ($app) {
 
     $db = new DbHandler();
     // vérifier l'Email et le mot de passe sont corrects
-    var result = $db->checkLogin($email, $password);
-    if (result == "ok") {
+    $res = $db->checkLogin($email, $password);
+    if ($res == 'CONNECTION_OK') {
         // obtenir l'utilisateur par email
         $user = $db->getUserByEmail($email);
 
@@ -146,30 +159,20 @@ $app->post('/login', function() use ($app) {
                 $response['createdAt'] = $user['created_at'];
             }
             else if($user["status"]==0) {
-                $response['error'] = true;
-                $response['champ'] = "email";
-                $response['message'] = "Votre compte n'a pas encore été validé";
+                $response = createResponse(true,"email", "Votre compte n'a pas encore été validé");
             }else{
-                $response['error'] = true;
-                $response['champ'] = "email";
-                $response['message'] = "Votre compte a été suspendu";
+                $response = createResponse(true,"email", "Votre compte a été suspendu");
             }
         } else {
             // erreur inconnue est survenue
-            $response['error'] = true;
-            $response['champ'] = "email";
-            $response['message'] = "Erreur inconnue";
+            $response = createResponse(true,"email", "Erreur inconnue");
         }
-    } else if(result == "error") {
+    } else if($res == 'CONNECTION_NOK') {
         // identificateurs de l'utilisateur sont erronés
-        $response['error'] = true;
-        $response['champ'] = "password";
-        $response['message'] = 'Échec de la connexion. identificateurs incorrectes';
+        $response =  createResponse(true,"password", "Échec de la connexion. identificateurs incorrectes");
     } else {
         // not-found : le compte n'existe pas
-        $response['error'] = true;
-        $response['champ'] = "email";
-        $response['message'] = 'Ce compte n\'existe pas';
+        $response = createResponse(true,"email", "Ce compte n\'existe pas");
     }
 
     echoRespnse(200, $response);
