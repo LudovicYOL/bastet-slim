@@ -21,13 +21,12 @@ class DbHandler {
 
     /**
      * Creation nouvel utilisateur
-     * @param String $name nom complet de l'utilisateur
      * @param String $email email de connexion
      * @param String $password mot de passe de connexion
+     * @param String $role role de l'utilisateur
      */
-    public function createUser($name, $email, $password) {
+    public function createUser($email, $password, $role) {
         require_once 'PassHash.php';
-
 
         // Vérifiez d'abord si l'utilisateur existe déjà dans db
         if (!$this->isUserExists($email)) {
@@ -38,8 +37,8 @@ class DbHandler {
             $api_key = $this->generateApiKey();
 
             // requete d'insertion
-            $stmt = $this->conn->prepare("INSERT INTO users(name, email, password_hash, api_key, status) values(?, ?, ?, ?, 1)");
-            $stmt->bind_param("ssss", $name, $email, $password_hash, $api_key);
+            $stmt = $this->conn->prepare("INSERT INTO users(email, password_hash, role, api_key, status) values(?, ?, ?, ?, 0)");
+            $stmt->bind_param("ssss", $email, $password_hash, $role, $api_key);
 
             $result = $stmt->execute();
 
@@ -122,15 +121,15 @@ class DbHandler {
      * @param String $email
      */
     public function getUserByEmail($email) {
-        $stmt = $this->conn->prepare("SELECT name, email, api_key, status, created_at FROM users WHERE email = ?");
+        $stmt = $this->conn->prepare("SELECT email, api_key, role, status, created_at FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
-            $stmt->bind_result($name, $email, $api_key, $status, $created_at);
+            $stmt->bind_result($email, $api_key, $role, $status, $created_at);
             $stmt->fetch();
             $user = array();
-            $user["name"] = $name;
             $user["email"] = $email;
             $user["api_key"] = $api_key;
+            $user["role"] = $role;
             $user["status"] = $status;
             $user["created_at"] = $created_at;
             $stmt->close();
@@ -196,6 +195,53 @@ class DbHandler {
     private function generateApiKey() {
         return md5(uniqid(rand(), true));
     }
+
+
+    /* ------------- méthodes table`profile` ------------------ */
+ /**
+     * Creation nouvelle tache
+     * @param int $user id of the user  
+     * @param String $nom nom de l'utilisateur
+     * @param String $prenom prenom de l'utilisateur
+     * @param String $promotion annee d'obtention du diplome
+     * @param Date $date_naiss date de naissance 
+     */
+    public function createProfile($user, $nom, $prenom, $promotion, $date_naiss) {
+        $stmt = $this->conn->prepare("INSERT INTO profile(user, nom, prenom, promotion, date_naiss) VALUES(?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $user, $nom, $prenom, $promotion, $date_naiss);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if ($result) {
+            // Utilisateur inséré avec succès
+            return PROFILE_CREATED_SUCCESSFULLY;
+        } else {
+            //Échec de la création du profil
+            return PROFILE_CREATE_FAILED;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /* ------------- méthodes table`tasks` ------------------ */
 

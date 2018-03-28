@@ -95,31 +95,40 @@ $app->get('/test', function () {
  */
 $app->post('/register', function() use ($app) {
     // vérifier les paramètres requises
-    verifyRequiredParams(array('name', 'email', 'password'));
+    verifyRequiredParams(array('email', 'password', 'role'));
 
     $response = array();
 
     // lecture des params de post
-    $name = $app->request->post('name');
     $email = $app->request->post('email');
     $password = $app->request->post('password');
+    $role = $app->request->post('role');
 
-    // valider adresse email
-    validateEmail($email);
-
-    $db = new DbHandler();
-    $res = $db->createUser($name, $email, $password);
-
-    if ($res == USER_CREATED_SUCCESSFULLY) {
-        $response["error"] = false;
-        $response["message"] = "Vous êtes inscrit avec succès";
-    } else if ($res == USER_CREATE_FAILED) {
+    $roles = array('ETUDIANT', 'ALUMNI', 'ADMIN', 'ECOLE');
+    if(!in_array($role, $roles)){
         $response["error"] = true;
-        $response["message"] = "Oops! Une erreur est survenue lors de l'inscription";
-    } else if ($res == USER_ALREADY_EXISTED) {
-        $response["error"] = true;
-        $response["message"] = "Désolé, cet E-mail éxiste déja";
+        $response["message"] = "Role non reconnu";
     }
+    else
+    {
+        // valider adresse email
+        validateEmail($email);
+
+        $db = new DbHandler();
+        $res = $db->createUser($email, $password, $role);
+
+        if ($res == USER_CREATED_SUCCESSFULLY) {
+            $response["error"] = false;
+            $response["message"] = "Vous êtes inscrit avec succès";
+        } else if ($res == USER_CREATE_FAILED) {
+            $response["error"] = true;
+            $response["message"] = "Oops! Une erreur est survenue lors de l'inscription";
+        } else if ($res == USER_ALREADY_EXISTED) {
+            $response["error"] = true;
+            $response["message"] = "Désolé, cet e-mail existe déja";
+        }
+    }
+
     // echo de la repense  JSON
     echoRespnse(201, $response);
 });
