@@ -162,7 +162,6 @@ $app->post('/login', function() use ($app) {
         if ($user != NULL) {
             if($user["status"]==1){
                 $response["error"] = false;
-                $response['name'] = $user['name'];
                 $response['email'] = $user['email'];
                 $response['apiKey'] = $user['api_key'];
                 $response['createdAt'] = $user['created_at'];
