@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  mer. 28 mars 2018 à 14:12
+-- Généré le :  lun. 09 avr. 2018 à 15:56
 -- Version du serveur :  10.1.30-MariaDB
 -- Version de PHP :  7.2.2
 
@@ -34,8 +34,17 @@ CREATE TABLE `profile` (
   `nom` varchar(50) NOT NULL,
   `prenom` varchar(50) NOT NULL,
   `promotion` varchar(4) NOT NULL,
-  `date_naiss` date NOT NULL
+  `date_naiss` date NOT NULL,
+  `keywords` varchar(1000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `profile`
+--
+
+INSERT INTO `profile` (`id`, `user`, `nom`, `prenom`, `promotion`, `date_naiss`, `keywords`) VALUES
+(1, 1, 'YOL', 'Ludovic', '2016', '1993-10-01', 'developpement;gestion;projet;'),
+(2, 2, 'Receveur', 'Alexandre', '2017', '2017-04-07', 'achat;logistique;java;airbus');
 
 -- --------------------------------------------------------
 
@@ -79,12 +88,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `password_hash`, `role`, `api_key`, `status`, `created_at`) VALUES
 (1, 'ludovic.yol@gmail.com', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ADMIN', 'c3b5172a4bc327edcdcb6d5b8b6857cf', 1, '2018-03-18 18:44:21'),
-(2, 'test@gmail.com', '$2a$10$d16e8a628fa2322bd62feeotrb0t0xHWSZBWY/UqYVC9BppnzEG2C', 'MEMBER', '1828b5d4ca17608caea4b16edb800bbb', 0, '2018-03-28 11:26:28'),
-(3, 'test2@gmail.com', '$2a$10$bf5418ae69317b6db9885uitgouaZME8fPge4bNVcPffw.Mx/wNTC', 'ETUDIANT', '423633e60f0ddd133152f3c424231866', 0, '2018-03-28 11:41:59'),
-(4, 'test3@gmail.com', '$2a$10$c674c7d4c8759d5086835uXmwgOtcN.xc6hGr1TOyodu.vPE9x98u', 'ECOLE', '6f04abeb300498b7db74eeb81ce3e785', 0, '2018-03-28 11:50:26'),
-(5, 'test4@gmail.com', '$2a$10$5e25e6347a5f7984d31ecuKvBcPNLCqWrPJ/VeF.QYzmTunKmhGeW', 'ECOLE', '2e1a2f8ecb118b51fcc4590ede0182db', 0, '2018-03-28 11:51:46'),
-(6, 'test5@gmail.com', '$2a$10$7c9882a83cd62a7c233f6OrcXkf5MO3l1Q25GIpsTkZmIqN312nn.', 'ECOLE', '8606df991888028635df356e2fe1d5ea', 0, '2018-03-28 11:53:44'),
-(7, 'test6@gmail.com', '$2a$10$7055a7a2a6d6685a7c921uPUDcrCkarB5lFDMYHB.wEm1WWMmXJwu', 'ECOLE', '5498c3da4e60b2f4edb88a4dc4456eee', 0, '2018-03-28 11:54:03');
+(2, 'alexandre.receveur@yahoo.fr', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ADMIN', 'c3b5172a4bc327edcdcb6d5b8b6857cf', 1, '2018-04-09 11:45:36');
 
 -- --------------------------------------------------------
 
@@ -137,7 +141,7 @@ ALTER TABLE `user_tasks`
 -- AUTO_INCREMENT pour la table `profile`
 --
 ALTER TABLE `profile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `tasks`
@@ -149,7 +153,7 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `user_tasks`

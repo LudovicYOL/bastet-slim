@@ -198,8 +198,8 @@ class DbHandler {
 
 
     /* ------------- méthodes table`profile` ------------------ */
- /**
-     * Creation nouvelle tache
+    /**
+     * Creation nouveau profil
      * @param int $user id of the user  
      * @param String $nom nom de l'utilisateur
      * @param String $prenom prenom de l'utilisateur
@@ -219,6 +219,30 @@ class DbHandler {
             //Échec de la création du profil
             return PROFILE_CREATE_FAILED;
         }
+    }
+
+    /**
+     * Récupération des profils utilisateurs
+     */
+    public function getAllProfiles() {
+        $stmt = $this->conn->prepare("SELECT u.id, u.email, u.role, u.status, u.created_at, p.nom, p.prenom, p.promotion, p.date_naiss, p.keywords FROM users u, profile p  WHERE u.id = p.user");
+        $stmt->execute();
+        $profiles = $stmt->get_result();
+        $stmt->close();
+        return $profiles;
+    }
+
+    /**
+     * Récupération des profils utilisateurs filtrés par un mot clé
+     * @param keyword mot clé de recherche
+     */
+    public function getProfiles($keyword) {
+        $stmt = $this->conn->prepare("SELECT u.id, u.email, u.role, u.status, u.created_at, p.nom, p.prenom, p.promotion, p.date_naiss, p.keywords FROM users u, profile p  WHERE u.id = p.user AND (p.keywords LIKE CONCAT('%',?,'%') OR p.nom LIKE CONCAT('%',?,'%') OR p.prenom LIKE CONCAT('%',?,'%') OR p.promotion LIKE CONCAT('%',?,'%'))");
+        $stmt->bind_param("ssss", $keyword, $keyword, $keyword, $keyword);
+        $stmt->execute();
+        $profiles = $stmt->get_result();
+        $stmt->close();
+        return $profiles;
     }
 
 

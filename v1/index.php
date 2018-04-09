@@ -223,6 +223,84 @@ function authenticate(\Slim\Route $route) {
     }
 }
 
+
+/*****************************/
+/** PROFILE **/
+/*****************************/
+/**
+ *Lister tous les profils utilisateurs 
+ * method GET
+ * url /profiles
+ */
+$app->get('/profiles/', 'authenticate', function() {
+
+    $response = array();
+    $db = new DbHandler();
+
+    // aller chercher toutes les tâches de l'utilisateur
+    $result = $db->getAllProfiles();
+
+    $response["error"] = false;
+    $response["profiles"] = array();
+
+    // boucle au travers du résultat et de la préparation du tableau des tâches
+    while ($profile = $result->fetch_assoc()) {
+        $tmp = array();
+        $tmp["id"] = $profile["id"];
+        $tmp["email"] = $profile["email"];
+        $tmp["role"] = $profile["role"];
+        $tmp["status"] = $profile["status"];
+        $tmp["created_at"] = $profile["created_at"];
+        $tmp["nom"] = $profile["nom"];
+        $tmp["prenom"] = $profile["prenom"];
+        $tmp["promotion"] = $profile["promotion"];
+        $tmp["date_naiss"] = $profile["date_naiss"];
+        $tmp["keywords"] = $profile["keywords"];
+        array_push($response["profiles"], $tmp);
+    }
+    echoRespnse(200, $response);
+});
+
+/**
+ * Liste les profils utilisateurs en fonction d'un mot clé
+ * method GET
+ * URL : /profiles/keyword
+ */
+$app->get('/profiles/:keyword', 'authenticate', function($keyword) {
+
+    $response = array();
+    $db = new DbHandler();
+
+    // aller chercher toutes les tâches de l'utilisateur
+    $result = $db->getProfiles($keyword);
+
+    $response["error"] = false;
+    $response["profiles"] = array();
+
+    // boucle au travers du résultat et de la préparation du tableau des tâches
+    while ($profile = $result->fetch_assoc()) {
+        $tmp = array();
+        $tmp["id"] = $profile["id"];
+        $tmp["email"] = $profile["email"];
+        $tmp["role"] = $profile["role"];
+        $tmp["status"] = $profile["status"];
+        $tmp["created_at"] = $profile["created_at"];
+        $tmp["nom"] = $profile["nom"];
+        $tmp["prenom"] = $profile["prenom"];
+        $tmp["promotion"] = $profile["promotion"];
+        $tmp["date_naiss"] = $profile["date_naiss"];
+        $tmp["keywords"] = $profile["keywords"];
+        array_push($response["profiles"], $tmp);
+    }
+    echoRespnse(200, $response);
+});
+
+
+/***********************/
+/** TASKS **/
+/***********************/
+
+
 /**
  *Création d'une nouvelle tâche dans db
  * method POST
