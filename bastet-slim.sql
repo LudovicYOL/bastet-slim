@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  lun. 09 avr. 2018 à 15:56
+-- Généré le :  mar. 10 avr. 2018 à 15:56
 -- Version du serveur :  10.1.30-MariaDB
 -- Version de PHP :  7.2.2
 
@@ -35,16 +35,17 @@ CREATE TABLE `profile` (
   `prenom` varchar(50) NOT NULL,
   `promotion` varchar(4) NOT NULL,
   `date_naiss` date NOT NULL,
-  `keywords` varchar(1000) NOT NULL
+  `keywords` varchar(1000) NOT NULL,
+  `picture` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `profile`
 --
 
-INSERT INTO `profile` (`id`, `user`, `nom`, `prenom`, `promotion`, `date_naiss`, `keywords`) VALUES
-(1, 1, 'YOL', 'Ludovic', '2016', '1993-10-01', 'developpement;gestion;projet;'),
-(2, 2, 'Receveur', 'Alexandre', '2017', '2017-04-07', 'achat;logistique;java;airbus');
+INSERT INTO `profile` (`id`, `user`, `nom`, `prenom`, `promotion`, `date_naiss`, `keywords`, `picture`) VALUES
+(1, 1, 'YOL', 'Ludovic', '2016', '1993-10-01', 'developpement;gestion;projet', 'yol_ludovic.jpg'),
+(2, 2, 'Receveur', 'Alexandre', '2017', '2017-04-07', 'achat;logistique;java;airbus', '');
 
 -- --------------------------------------------------------
 

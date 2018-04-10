@@ -225,7 +225,7 @@ class DbHandler {
      * Récupération des profils utilisateurs
      */
     public function getAllProfiles() {
-        $stmt = $this->conn->prepare("SELECT u.id, u.email, u.role, u.status, u.created_at, p.nom, p.prenom, p.promotion, p.date_naiss, p.keywords FROM users u, profile p  WHERE u.id = p.user");
+        $stmt = $this->conn->prepare("SELECT u.id, u.email, u.role, u.status, u.created_at, p.nom, p.prenom, p.promotion, p.date_naiss, p.keywords, p.picture FROM users u, profile p  WHERE u.id = p.user");
         $stmt->execute();
         $profiles = $stmt->get_result();
         $stmt->close();
@@ -237,12 +237,41 @@ class DbHandler {
      * @param keyword mot clé de recherche
      */
     public function getProfiles($keyword) {
-        $stmt = $this->conn->prepare("SELECT u.id, u.email, u.role, u.status, u.created_at, p.nom, p.prenom, p.promotion, p.date_naiss, p.keywords FROM users u, profile p  WHERE u.id = p.user AND (p.keywords LIKE CONCAT('%',?,'%') OR p.nom LIKE CONCAT('%',?,'%') OR p.prenom LIKE CONCAT('%',?,'%') OR p.promotion LIKE CONCAT('%',?,'%'))");
+        $stmt = $this->conn->prepare("SELECT u.id, u.email, u.role, u.status, u.created_at, p.nom, p.prenom, p.promotion, p.date_naiss, p.keywords, p.picture FROM users u, profile p  WHERE u.id = p.user AND (p.keywords LIKE CONCAT('%',?,'%') OR p.nom LIKE CONCAT('%',?,'%') OR p.prenom LIKE CONCAT('%',?,'%') OR p.promotion LIKE CONCAT('%',?,'%'))");
         $stmt->bind_param("ssss", $keyword, $keyword, $keyword, $keyword);
         $stmt->execute();
         $profiles = $stmt->get_result();
         $stmt->close();
         return $profiles;
+    }
+
+    /**
+     * Récupération d'un profil utilisateur
+     * @param id id du profil à récupérer     */
+    public function getProfile($id) {
+        $stmt = $this->conn->prepare("SELECT u.id, u.email, u.role, u.status, u.created_at, p.nom, p.prenom, p.promotion, p.date_naiss, p.keywords, p.picture FROM users u, profile p  WHERE u.id = p.user AND p.id = ?");
+        $stmt->bind_param("i", $id);       
+        if ($stmt->execute()) {
+            $stmt->bind_result($id, $email, $role, $status, $created_at, $nom, $prenom, $promotion, $date_naiss, $keywords, $picture);
+            $stmt->fetch();
+            $profile = array();
+            $profile["id"] = $id;
+            $profile["email"] = $email;
+            $profile["role"] = $role;
+            $profile["status"] = $status;
+            $profile["created_at"] = $created_at;
+            $profile["nom"] = $nom;
+            $profile["prenom"] = $prenom;
+            $profile["promotion"] = $promotion;
+            $profile["date_naiss"] = $date_naiss;
+            $profile["keywords"] = $keywords;
+            $profile["picture"] = $picture;
+            $stmt->close();
+            return $profile;
+        } else {
+            return NULL;
+        }
+       
     }
 
 

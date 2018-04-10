@@ -80,13 +80,6 @@ function createResponse($error, $field, $message){
     return $response;
 }
 
-
-
-$app->get('/test', function () { 
-    echo "Hello, World! test"; 
-  });
-
-
  /**
  * Enregistrement de l'utilisateur
  * url - /register
@@ -256,6 +249,7 @@ $app->get('/profiles/', 'authenticate', function() {
         $tmp["promotion"] = $profile["promotion"];
         $tmp["date_naiss"] = $profile["date_naiss"];
         $tmp["keywords"] = $profile["keywords"];
+        $tmp["picture"] = $profile["picture"];
         array_push($response["profiles"], $tmp);
     }
     echoRespnse(200, $response);
@@ -290,10 +284,47 @@ $app->get('/profiles/:keyword', 'authenticate', function($keyword) {
         $tmp["promotion"] = $profile["promotion"];
         $tmp["date_naiss"] = $profile["date_naiss"];
         $tmp["keywords"] = $profile["keywords"];
+        $tmp["picture"] = $profile["picture"];
         array_push($response["profiles"], $tmp);
     }
     echoRespnse(200, $response);
 });
+
+/**
+ * Retourne le profil demandé
+ * METHOD : GET
+ * @param id id de l'utilisateur à récupérer
+ */
+$app->get('/profile/:id', 'authenticate', function($id) {
+
+    $response = array();
+    $db = new DbHandler();
+
+    //chercher profile
+    $result = $db->getProfile($id);
+
+    if ($result != NULL) {
+        $response["error"] = false;
+        $response["id"] = $result["id"];
+        $response["email"] = $result["email"];
+        $response["role"] = $result["role"];
+        $response["status"] = $result["status"];
+        $response["created_at"] = $result["created_at"];
+        $response["nom"] = $result["nom"];
+        $response["prenom"] = $result["prenom"];
+        $response["promotion"] = $result["promotion"];
+        $response["date_naiss"] = $result["date_naiss"];
+        $response["keywords"] = $result["keywords"];
+        $response["picture"] = $result["picture"];
+        echoRespnse(200, $response);
+    } else {
+        $response["error"] = true;
+        $response["message"] = "La ressource demandée n'existe pas";
+        echoRespnse(404, $response);
+    }
+});
+
+
 
 
 /***********************/
@@ -330,35 +361,6 @@ $app->post('/tasks', 'authenticate', function() use ($app) {
         $response["message"] = "Impossible de créer la tâche. S'il vous plaît essayer à nouveau";
         echoRespnse(200, $response);
     }
-});
-
-/**
- *Lister toutes les tâches d'un utilisateur particulier
- * method GET
- * url /tasks
- */
-$app->get('/tasks', 'authenticate', function() {
-    global $user_id;
-    $response = array();
-    $db = new DbHandler();
-
-    // aller chercher toutes les tâches de l'utilisateur
-    $result = $db->getAllUserTasks($user_id);
-
-    $response["error"] = false;
-    $response["tasks"] = array();
-
-    // boucle au travers du résultat et de la préparation du tableau des tâches
-    while ($task = $result->fetch_assoc()) {
-        $tmp = array();
-        $tmp["id"] = $task["id"];
-        $tmp["task"] = $task["task"];
-        $tmp["status"] = $task["status"];
-        $tmp["createdAt"] = $task["created_at"];
-        array_push($response["tasks"], $tmp);
-    }
-
-    echoRespnse(200, $response);
 });
 
 /**
