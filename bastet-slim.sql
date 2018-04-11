@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  mar. 10 avr. 2018 à 15:56
+-- Généré le :  mer. 11 avr. 2018 à 14:16
 -- Version du serveur :  10.1.30-MariaDB
 -- Version de PHP :  7.2.2
 
@@ -45,7 +45,13 @@ CREATE TABLE `profile` (
 
 INSERT INTO `profile` (`id`, `user`, `nom`, `prenom`, `promotion`, `date_naiss`, `keywords`, `picture`) VALUES
 (1, 1, 'YOL', 'Ludovic', '2016', '1993-10-01', 'developpement;gestion;projet', 'yol_ludovic.jpg'),
-(2, 2, 'Receveur', 'Alexandre', '2017', '2017-04-07', 'achat;logistique;java;airbus', '');
+(2, 2, 'Receveur', 'Alexandre', '2017', '2017-04-07', 'achat;logistique;java;airbus', 'receveur_alexandre.jpg'),
+(12, 6, 'Fleurot', 'Alexandre', '2018', '1995-10-10', 'stage;mipih;dev', ''),
+(20, 3, 'Rouchy', 'Elise', '2017', '1991-05-20', 'mipih;dev;java', ''),
+(56, 4, 'Roulenq', 'Vincent', '2016', '1993-06-06', 'mipih;dev;agile;scrum;master', ''),
+(69, 0, 'De Lagoutine', 'Thomas', '2016', '1993-01-10', 'dev;infotel;java;big;data', ''),
+(70, 7, 'Rawat', 'Eshane', '2018', '1990-10-10', 'design;dev;java;angular;scrum', ''),
+(71, 8, 'Chaumeil', 'Anais', '2019', '1996-01-01', 'dev;java;python', '');
 
 -- --------------------------------------------------------
 
@@ -89,7 +95,14 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `password_hash`, `role`, `api_key`, `status`, `created_at`) VALUES
 (1, 'ludovic.yol@gmail.com', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ADMIN', 'c3b5172a4bc327edcdcb6d5b8b6857cf', 1, '2018-03-18 18:44:21'),
-(2, 'alexandre.receveur@yahoo.fr', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ADMIN', 'c3b5172a4bc327edcdcb6d5b8b6857cf', 1, '2018-04-09 11:45:36');
+(2, 'alexandre.receveur@yahoo.fr', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ADMIN', 'c3b5172a4bc327edcdcb6d5b8b6857cf', 1, '2018-04-09 11:45:36'),
+(3, 'elise.rouchy@gmail.com', '$2a$10$0d872355e74cbb2d3dbb1eAMIHBSe1a28r.JieNJLQycDTui4oTsW', 'ALUMNI', 'fd68547cfead9b4d490bd018aa38c5dd', 1, '2018-04-11 10:18:02'),
+(4, 'vincent.roulenq@gmail.com', '$2a$10$318f7f563f28f7591951dO7P4wj0VBPxrtEKhv66OnPrdNZQcH3DW', 'ALUMNI', 'c20a1eaed111f41486219be6726f24eb', 1, '2018-04-11 10:18:19'),
+(5, 'thomas.delagoutine@gmail.com', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ALUMNI', 'c20a1eaed111f41486219be6726f24ee', 0, '2018-04-11 11:54:26'),
+(6, 'alexandre.fleurot@gmail.com', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ETUDIANT', 'c20a1eaed111f41486219be6726f24ef', 1, '2018-04-11 11:54:56'),
+(7, 'eshane.rawat@gmail.com', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ETUDIANT', 'c20a1eaed111f41486219be6726f24eg', 0, '2018-04-11 11:55:15'),
+(8, 'anais.chaumeil@gmail.com', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ETUDIANT', 'c20a1eaed111f41486219be6726f24eh', 2, '2018-04-11 11:56:47'),
+(9, 'ecole@univ-jfc.fr', '$2a$10$22164a2d1e6b74d4602fduk0RbgaHOeC3zFIuqpCQEXQSCgKssZJO', 'ECOLE', 'c20a1eaed111f41486219be6726f24ei', 1, '2018-04-11 11:57:03');
 
 -- --------------------------------------------------------
 
@@ -142,7 +155,7 @@ ALTER TABLE `user_tasks`
 -- AUTO_INCREMENT pour la table `profile`
 --
 ALTER TABLE `profile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT pour la table `tasks`
@@ -154,7 +167,7 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `user_tasks`

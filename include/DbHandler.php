@@ -121,12 +121,13 @@ class DbHandler {
      * @param String $email
      */
     public function getUserByEmail($email) {
-        $stmt = $this->conn->prepare("SELECT email, api_key, role, status, created_at FROM users WHERE email = ?");
+        $stmt = $this->conn->prepare("SELECT id, email, api_key, role, status, created_at FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
-            $stmt->bind_result($email, $api_key, $role, $status, $created_at);
+            $stmt->bind_result($id, $email, $api_key, $role, $status, $created_at);
             $stmt->fetch();
             $user = array();
+            $user["id"] = $id;
             $user["email"] = $email;
             $user["api_key"] = $api_key;
             $user["role"] = $role;
@@ -249,7 +250,7 @@ class DbHandler {
      * Récupération d'un profil utilisateur
      * @param id id du profil à récupérer     */
     public function getProfile($id) {
-        $stmt = $this->conn->prepare("SELECT u.id, u.email, u.role, u.status, u.created_at, p.nom, p.prenom, p.promotion, p.date_naiss, p.keywords, p.picture FROM users u, profile p  WHERE u.id = p.user AND p.id = ?");
+        $stmt = $this->conn->prepare("SELECT u.id, u.email, u.role, u.status, u.created_at, p.nom, p.prenom, p.promotion, p.date_naiss, p.keywords, p.picture FROM users u, profile p  WHERE u.id = p.user AND u.id = ?");
         $stmt->bind_param("i", $id);       
         if ($stmt->execute()) {
             $stmt->bind_result($id, $email, $role, $status, $created_at, $nom, $prenom, $promotion, $date_naiss, $keywords, $picture);
